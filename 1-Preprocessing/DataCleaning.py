@@ -3,10 +3,10 @@ import numpy as np
 
 def main():
     # Faz a leitura do arquivo
-    names = ['BI-RADS','Age','Shape','Margin','Density','Severity'] 
-    features = ['Age','Shape','Margin','Density','Severity']
-    output_file = '0-Datasets/MamoClear.data'
-    input_file = '0-Datasets/Mamo.data'
+    names = ['ID','N_Days','Status','Drug','Age','Sex','Ascites','Hepatomegaly','Spiders','Edema','Bilirubin','Cholesterol','Albumin','Copper','Alk_Phos','SGOT','Tryglicerides','Platelets','Prothrombin','Stage'] 
+    features = ['N_Days','Status','Drug','Age','Sex','Ascites','Hepatomegaly','Spiders','Edema','Bilirubin','Cholesterol','Albumin','Copper','Alk_Phos','SGOT','Tryglicerides','Platelets','Prothrombin', 'Stage']
+    output_file = '0-Datasets/cirrhosisClear.csv'
+    input_file = '0-Datasets/cirrhosis.csv'
     df = pd.read_csv(input_file,         # Nome do arquivo com dados
                      names = names,      # Nome das colunas 
                      usecols = features, # Define as colunas que serão  utilizadas
@@ -40,6 +40,9 @@ def main():
     for c in columns_missing_value:
         UpdateMissingValues(df, c)
     
+    cat_columns = df.select_dtypes(['object']).columns
+    df[cat_columns] = df[cat_columns].apply(lambda x: pd.factorize(x)[0])
+
     print(df.describe())
     print("\n")
     print(df.head(15))
